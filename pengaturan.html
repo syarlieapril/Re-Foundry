@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengaturan | Re:Foundry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="pengaturan.css">
+</head>
+<body class="settings-page">
+
+  <header class="settings-header">
+    <a href="index.html" class="settings-brand">
+      Re:<span>Foundry</span>
+    </a>
+    <a href="index.html" class="back-link">← Kembali</a>
+  </header>
+
+  <main class="settings-container">
+    <div class="settings-heading">
+      <p class="settings-eyebrow">ACCOUNT CENTER</p>
+      <h1>Pengaturan</h1>
+      <p>Kelola keamanan dan informasi Re:Foundry milikmu.</p>
+    </div>
+
+    <div class="settings-layout">
+      <aside class="settings-menu">
+        <button class="settings-tab active" data-tab="tampilan">
+          <span>🎨</span> Preferensi Tampilan
+        </button>
+
+        <button class="settings-tab" data-tab="tentang">
+          <span>ℹ️</span> Tentang Re:Foundry
+        </button>
+      </aside>
+
+      <section class="settings-content">
+
+        <!-- KEAMANAN -->
+        <!-- PREFERENSI TAMPILAN -->
+        <div class="settings-panel active" id="panel-tampilan">
+          <h2>Preferensi Tampilan</h2>
+          <p class="panel-description">
+            Sesuaikan tampilan Re:Foundry agar lebih nyaman digunakan.
+          </p>
+          
+          <div class="theme-options">
+            <button type="button" class="theme-option" data-theme="light">
+              <span class="theme-preview theme-preview-light">
+                <span class="preview-circle">☀</span>
+                <span class="preview-line"></span>
+                <span class="preview-line short"></span>
+              </span>
+              <span class="theme-option-info">
+                <strong>Terang</strong>
+                <small>Tampilan biru-putih klasik</small>
+              </span>
+              <span class="theme-check">✓</span>
+            </button>
+            <button type="button" class="theme-option" data-theme="dark">
+              <span class="theme-preview theme-preview-dark">
+        <span class="preview-circle">☾</span>
+        <span class="preview-line"></span>
+        <span class="preview-line short"></span>
+      </span>
+      <span class="theme-option-info">
+        <strong>Gelap</strong>
+        <small>Lebih redup untuk suasana malam</small>
+      </span>
+      <span class="theme-check">✓</span>
+    </button>
+
+    <button type="button" class="theme-option" data-theme="system">
+      <span class="theme-preview theme-preview-system">
+        <span class="preview-circle">💻</span>
+        <span class="preview-line"></span>
+        <span class="preview-line short"></span>
+      </span>
+      <span class="theme-option-info">
+        <strong>Ikuti Sistem</strong>
+        <small>Mengikuti tema perangkatmu</small>
+      </span>
+      <span class="theme-check">✓</span>
+    </button>
+  </div>
+
+  <p id="themeMessage" class="settings-note" role="status">
+    Tema tersimpan otomatis saat dipilih.
+  </p>
+
+  <div class="settings-option logout-option">
+    <div>
+      <h3>Keluar dari akun</h3>
+      <p>Akhiri sesi akun yang sedang aktif.</p>
+    </div>
+    <button class="settings-button danger" id="logoutBtn">
+      Logout
+    </button>
+  </div>
+</div>
+
+        <!-- TENTANG -->
+       <div class="settings-panel" id="panel-tentang">
+  <div class="about-hero">
+    <span class="about-eyebrow">CAMPUS LOST & FOUND PLATFORM</span>
+    <h2>About Re:Foundry</h2>
+    <p class="about-tagline">Lost it? Let's Re:Found it.</p>
+    <p class="about-intro">
+      Platform digital untuk membantu warga kampus menemukan
+      kembali barang yang hilang dan mengembalikan barang temuan
+      kepada pemiliknya.
+    </p>
+    <span class="about-brand">RE:FOUNDRY</span>
+  </div>
+
+  <section class="about-section">
+    <span class="about-number">01 / OUR MISSION</span>
+    <h3>Menghubungkan Kembali Apa yang Berarti</h3>
+    <p>
+      Re:Foundry hadir untuk mempermudah pelaporan dan pencarian
+      barang hilang di lingkungan kampus melalui platform yang
+      praktis, terorganisasi, dan mudah digunakan.
+    </p>
+    <p>
+      Kami percaya bahwa kepedulian sederhana dapat menciptakan
+      dampak besar. Karena itu, Re:Foundry ingin mendorong budaya
+      saling membantu dan bertanggung jawab di lingkungan kampus.
+    </p>
+  </section>
+
+  <section class="about-section">
+    <span class="about-number">02 / HOW IT WORKS</span>
+    <h3>Bagaimana Cara Kerjanya?</h3>
+
+    <div class="about-steps">
+      <article class="about-step">
+        <div class="about-icon">01</div>
+        <h4>Submit a Report</h4>
+        <p>Laporkan barang yang hilang atau ditemukan beserta
+        informasi yang diperlukan.</p>
+      </article>
+
+      <article class="about-step">
+        <div class="about-icon">02</div>
+        <h4>Search & Discover</h4>
+        <p>Telusuri laporan yang tersedia untuk mencari barang
+        yang sesuai dengan informasi kamu.</p>
+      </article>
+
+      <article class="about-step">
+        <div class="about-icon">03</div>
+        <h4>Reconnect</h4>
+        <p>Gunakan informasi laporan untuk membantu proses
+        pencocokan barang dengan pemiliknya.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="about-section">
+    <span class="about-number">03 / WHY RE:FOUNDRY?</span>
+    <h3>Lebih dari Sekadar Pencarian</h3>
+
+    <div class="about-benefits">
+      <article class="about-benefit">
+        <span>✦</span>
+        <h4>Praktis</h4>
+        <p>Pelaporan dan pencarian dalam satu platform.</p>
+      </article>
+
+      <article class="about-benefit">
+        <span>◇</span>
+        <h4>Terorganisasi</h4>
+        <p>Informasi barang tersaji secara lebih terstruktur.</p>
+      </article>
+
+      <article class="about-benefit">
+        <span>♡</span>
+        <h4>Kolaboratif</h4>
+        <p>Mendorong warga kampus untuk saling membantu.</p>
+      </article>
+
+      <article class="about-benefit">
+        <span>✧</span>
+        <h4>Peduli</h4>
+        <p>Membangun kepedulian terhadap barang milik sesama.</p>
+      </article>
+    </div>
+  </section>
+
+  <div class="about-closing">
+    <h3>Small Actions, Meaningful Connections.</h3>
+    <p>Setiap laporan adalah kesempatan untuk membantu.
+    Setiap barang yang kembali adalah bukti bahwa kepedulian
+    bisa dimulai dari hal sederhana.</p>
+    <strong>Re:Foundry — Reconnect with what matters.</strong>
+  </div>
+</div>
+     
+
+      </section>
+    </div>
+  </main>
+
+  <!-- MODAL GANTI KATA SANDI -->
+  <div class="settings-modal" id="passwordModal" hidden>
+    <div class="settings-modal-card">
+      <h2>Ganti Kata Sandi</h2>
+      <p>Masukkan kata sandi lama dan kata sandi baru.</p>
+
+      <form id="passwordForm">
+        <div class="settings-field">
+          <label for="oldPassword">Kata sandi lama</label>
+          <input
+            id="oldPassword"
+            type="password"
+            required
+            autocomplete="current-password"
+          >
+        </div>
+
+        <div class="settings-field">
+          <label for="newPassword">Kata sandi baru</label>
+          <input
+            id="newPassword"
+            type="password"
+            required
+            minlength="8"
+            autocomplete="new-password"
+          >
+        </div>
+
+        <div class="settings-field">
+          <label for="confirmPassword">Konfirmasi kata sandi baru</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            required
+            minlength="8"
+            autocomplete="new-password"
+          >
+        </div>
+
+        <p id="passwordMessage" class="settings-note" role="status"></p>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="settings-button secondary"
+            id="cancelPasswordBtn"
+          >
+            Batal
+          </button>
+
+          <button type="submit" class="settings-button">
+            Simpan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="pengaturan.js"></script>
+</body>
+</html>

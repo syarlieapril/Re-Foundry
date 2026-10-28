@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Masuk – Re:foundry</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="anon">
+  <div class="wrap">
+    <header>
+      <h1 class="register-brand">RE:FOUNDRY</h1>
+      <p class="sub">Masuk untuk melihat dan melaporkan barang hilang.</p>
+    </header>
+
+    <main class="authbox">
+      <h2>Masuk</h2>
+
+      <form id="f" novalidate>
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="email"
+               placeholder="nama@email.com" required>
+
+        <label for="pass">Password</label>
+        <input id="pass" type="password"
+               autocomplete="current-password" required>
+
+        <div class="acts">
+          <button class="btn" id="go" type="submit">Masuk</button>
+        </div>
+
+        <p class="note" id="err" style="color:var(--lost)" role="alert"></p>
+      </form>
+
+      <p class="note">
+        Belum punya akun? <a href="register.html">Daftar di sini</a>
+      </p>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module">
+    import { supabase } from "./supabase.js";
+
+    const $ = (id) => document.getElementById(id);
+    const form = $("f");
+    const button = $("go");
+    const error = $("err");
+
+    async function checkSession() {
+      const { data } = await supabase.auth.getSession();
+
+      if (data.session) {
+        location.replace("index.html");
+      }
+    }
+
+    checkSession();
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      error.textContent = "";
+      button.disabled = true;
+
+      try {
+        const email = $("email").value.trim().toLowerCase();
+        const password = $("pass").value;
+
+        if (!email || !password) {
+          throw new Error("Email dan password wajib diisi.");
+        }
+
+        const { error: loginError } =
+          await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+
+        if (loginError) {
+          throw loginError;
+        }
+
+        location.replace("index.html");
+      } catch (err) {
+        error.textContent =
+          err.message || "Login gagal. Silakan coba lagi.";
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

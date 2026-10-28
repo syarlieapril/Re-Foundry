@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f8f5ed">
+  <meta name="description" content="Temukan barang hilang dan bantu teman kampus menemukan barangnya kembali.">
+  <title>Re:Foundry – Barang Hilang & Ditemukan</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Caveat:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Zen+Old+Mincho&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .profile-menu-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 14px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .profile-menu-link:hover {
+      background: var(--board, #f8f5ed);
+    }
+
+    .profile-menu-link[hidden],
+    .profile-menu[hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- HEADER -->
+    <header class="site-header">
+      <div class="header-main">
+        <div class="brand">
+          <div class="brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M24 12C18 7 10 7 4 10V38C11 35 18 36 24 41C30 36 37 35 44 38V10C38 7 30 7 24 12Z"
+                stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M24 13V40" stroke="currentColor" stroke-width="3"/>
+            </svg>
+          </div>
+          <h1 class="brand-title">Re: Foundry</h1>
+        </div>
+
+        <!-- MENU PROFIL -->
+        <div class="profile-area">
+          <div id="auth" class="auth">
+            <button
+              type="button"
+              class="profile-trigger"
+              id="profileTrigger"
+              aria-label="Buka menu profil"
+              aria-expanded="false"
+              aria-controls="profileMenu"
+            >
+              <span class="profile-avatar" id="profileAvatar">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="8" r="4" fill="currentColor"/>
+                  <path d="M4 21C4 16.8 7.2 14 12 14S20 16.8 20 21"
+                    fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="profile-chevron" aria-hidden="true">⌄</span>
+            </button>
+
+            <div class="profile-menu" id="profileMenu" hidden>
+              <div class="profile-menu-heading">
+                <strong id="profileName">Pengguna</strong>
+                <span id="profileEmail">Akun Re:Foundry</span>
+              </div>
+
+              <div class="profile-menu-divider"></div>
+
+              <a href="profile.html"
+                 id="profileView"
+                 class="profile-menu-link">
+                <span aria-hidden="true">♙</span>
+                <span>Profil Saya</span>
+              </a>
+
+              <button type="button" id="profileSettings">
+                <span aria-hidden="true">⚙</span>
+                Pengaturan
+              </button>
+
+              <!-- ADMIN DASHBOARD DI BAWAH PENGATURAN -->
+              <a href="admin-dashboard.html"
+                 id="adminDashboardLink"
+                 class="profile-menu-link"
+                 hidden>
+                <span aria-hidden="true">▦</span>
+                <span>Admin Dashboard</span>
+              </a>
+
+              <div class="profile-menu-divider"></div>
+
+              <button type="button"
+                      id="profileLogout"
+                      class="logout-option">
+                <span aria-hidden="true">↪</span>
+                Keluar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="sub">
+        Setiap barang yang hilang layak menemukan jalan pulang.
+        Setiap penemuan membuka kesempatan untuk mempertemukannya
+        kembali dengan pemiliknya.
+      </p>
+
+      <div class="welcome-row">
+        <div class="welcome-user">
+          <span class="welcome-dot" aria-hidden="true"></span>
+          <strong id="welcomeName">Selamat datang!</strong>
+        </div>
+        <span class="welcome-note">Komunitas kampus saling membantu.</span>
+      </div>
+    </header>
+
+    <!-- STATISTIK -->
+    <section class="stats" aria-label="Statistik barang">
+      <div class="stat stat-lost">
+        <span class="stat-icon" aria-hidden="true">⌕</span>
+        <div>
+          <b id="sLost">0</b>
+          <small>Dicari</small>
+        </div>
+      </div>
+
+      <div class="stat stat-found">
+        <span class="stat-icon" aria-hidden="true">♙</span>
+        <div>
+          <b id="sFound">0</b>
+          <small>Nunggu pemilik</small>
+        </div>
+      </div>
+
+      <div class="stat stat-done">
+        <span class="stat-icon" aria-hidden="true">✓</span>
+        <div>
+          <b id="sDone">0</b>
+          <small>Sudah pulang</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- KONTEN UTAMA -->
+    <main>
+      <section class="toolbar" aria-label="Cari dan filter barang">
+        <div class="search-row">
+          <label class="search-box" for="q">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="10.8" cy="10.8" r="6.8"
+                stroke="currentColor" stroke-width="2"/>
+              <path d="m16 16 5 5"
+                stroke="currentColor" stroke-width="2"
+                stroke-linecap="round"/>
+            </svg>
+            <input id="q" type="search"
+                   placeholder="Cari barang, lokasi, ciri-ciri..."
+                   autocomplete="off">
+          </label>
+
+          <label class="category-select" aria-label="Filter kategori">
+            <select id="cat">
+              <option value="">Semua kategori</option>
+            </select>
+          </label>
+
+          <button class="btn add-btn" id="add" type="button">
+            <span class="add-icon" aria-hidden="true">+</span>
+            <span>Tempel pengumuman</span>
+          </button>
+        </div>
+
+        <div class="tabs" id="tabs"
+             role="group" aria-label="Filter status">
+          <button class="tab on" type="button" data-t="all">Semua</button>
+          <button class="tab" type="button" data-t="lost">Dicari</button>
+          <button class="tab" type="button" data-t="found">Ketemu</button>
+          <button class="tab" type="button" data-t="claimed">Menunggu</button>
+          <button class="tab" type="button" data-t="done">Selesai</button>
+        </div>
+      </section>
+
+      <!-- DAFTAR LAPORAN -->
+      <section class="listing-section" aria-label="Daftar pengumuman barang">
+        <div class="listing-heading">
+          <div>
+            <span class="eyebrow">PAPAN PENGUMUMAN</span>
+            <h2>Barang di sekitar kampus</h2>
+            <p>Setiap barang punya cerita. Yuk, bantu temukan pemiliknya.</p>
+          </div>
+        </div>
+
+        <div class="grid" id="list" aria-live="polite"></div>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <div class="empty-illustration" aria-hidden="true">🔎</div>
+          <h3>Belum ada barang di sini</h3>
+          <p>Coba ubah kata pencarian atau pilih kategori lainnya.</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <span class="footer-mark" aria-hidden="true"></span>
+      <p>Temukan kembali, bantu sesama.</p>
+      <small id="mode">Data tersimpan di browser ini (localStorage).</small>
+    </footer>
+  </div>
+
+  <!-- MODAL TAMBAH LAPORAN -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true"
+         aria-labelledby="formTitle">
+      <div class="modal-heading">
+        <div>
+          <span class="eyebrow">KOMUNITAS RE:FOUNDRY</span>
+          <h2 id="formTitle">Tempel pengumuman</h2>
+          <p class="note">Isi detailnya supaya barang lebih mudah ditemukan.</p>
+        </div>
+        <button class="modal-close" id="cancel" type="button"
+                aria-label="Tutup formulir">×</button>
+      </div>
+
+      <div class="seg" id="typeSeg">
+        <button class="tab on" type="button" data-v="lost">Aku kehilangan</button>
+        <button class="tab" type="button" data-v="found">Aku nemu barang</button>
+      </div>
+
+      <form id="announcementForm" novalidate>
+        <label for="fTitle">Nama barang <span class="required">*</span></label>
+        <input id="fTitle" name="title" maxlength="80"
+               placeholder="Contoh: Dompet kulit hitam" required>
+
+        <label for="fCat">Kategori</label>
+        <select id="fCat" name="category">
+          <option value="">Pilih kategori</option>
+        </select>
+
+        <label for="fLoc">Lokasi terakhir / ditemukan <span class="required">*</span></label>
+        <input id="fLoc" name="location" maxlength="80"
+               placeholder="Contoh: Perpustakaan lantai 2" required>
+
+        <label for="fDate">Tanggal</label>
+        <input id="fDate" name="date" type="date">
+
+        <label for="fDesc">Ciri-ciri barang</label>
+        <textarea id="fDesc" name="description" rows="3" maxlength="300"
+                  placeholder="Warna, merek, stiker, isi, dan lainnya..."></textarea>
+
+        <label for="fPhoto">Foto barang <span class="optional">(opsional)</span></label>
+        <div class="upload-box">
+          <span class="upload-icon" aria-hidden="true">↥</span>
+          <span>Pilih foto barang dari perangkatmu</span>
+          <input id="fPhoto" name="photo" type="file" accept="image/*">
+        </div>
+
+        <img id="prev" alt="Pratinjau foto barang" hidden
+             style="max-width:100%;max-height:260px;object-fit:contain;margin-top:10px;">
+
+        <label for="fContact">Kontak <span class="required">*</span></label>
+        <input id="fContact" name="contact" maxlength="80"
+               placeholder="Nomor WhatsApp, IG, atau email" required>
+
+        <p class="note">
+          Kontak dapat dilihat pengguna lain. Jangan cantumkan kata sandi
+          atau informasi pribadi yang sensitif.
+        </p>
+
+        <div class="acts">
+          <button class="btn" id="save" type="submit">Kirim laporan ↗</button>
+          <button class="ghost" id="cancelForm" type="button">Batal</button>
+        </div>
+
+        <p class="note form-error" id="err" role="alert"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL KONFIRMASI HAPUS -->
+  <div class="modal" id="dmodal" aria-hidden="true">
+    <div class="dlg" role="alertdialog" aria-modal="true"
+         aria-labelledby="dTitle">
+      <div class="dialog-icon" aria-hidden="true">!</div>
+      <span class="eyebrow">KONFIRMASI</span>
+      <h2 id="dTitle">Hapus laporan?</h2>
+      <p id="dText">Apakah kamu yakin ingin menghapus laporan ini?</p>
+
+      <label for="dPass">Password akun</label>
+      <input id="dPass" type="password" autocomplete="current-password"
+             placeholder="Masukkan password untuk konfirmasi">
+
+      <p class="note form-error" id="dErr" role="alert"></p>
+
+      <div class="dbtns">
+        <button class="dno" id="dNo" type="button">Tidak, simpan</button>
+        <button class="dyes" id="dYes" type="button">Ya, hapus!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL VERIFIKASI KLAIM -->
+  <div class="modal" id="vmodal" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true"
+         aria-labelledby="vTitle">
+      <div class="modal-heading">
+        <h2 id="vTitle">Verifikasi</h2>
+        <button class="modal-close" id="vCancel" type="button"
+                aria-label="Tutup">×</button>
+      </div>
+
+      <p class="note" id="vText"></p>
+      <input id="vInput" autocomplete="off" placeholder="Masukkan jawaban">
+
+      <div class="acts">
+        <button class="btn" id="vOk" type="button">Lanjut</button>
+        <button class="ghost" id="vCancelBottom" type="button">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT UTAMA -->
+  <script type="module">
+    import { supabase } from "./supabase.js";
+
+    window.supabaseClient = supabase;
+
+    await import("./auth.js");
+    await import("./app.js");
+  </script>
+
+  <!-- INTERAKSI MENU PROFIL -->
+  <script>
+    (() => {
+      "use strict";
+
+      const trigger = document.getElementById("profileTrigger");
+      const menu = document.getElementById("profileMenu");
+      const profileSettings = document.getElementById("profileSettings");
+      const profileLogout = document.getElementById("profileLogout");
+
+      if (!trigger || !menu) return;
+
+      function closeProfileMenu() {
+        menu.hidden = true;
+        trigger.setAttribute("aria-expanded", "false");
+      }
+
+      trigger.addEventListener("click", (event) => {
+        event.stopPropagation();
+        menu.hidden = !menu.hidden;
+        trigger.setAttribute("aria-expanded", String(!menu.hidden));
+      });
+
+      menu.addEventListener("click", (event) => {
+        event.stopPropagation();
+      });
+
+      document.addEventListener("click", closeProfileMenu);
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeProfileMenu();
+      });
+
+      if (profileSettings) {
+        profileSettings.addEventListener("click", () => {
+          closeProfileMenu();
+          window.location.href = "pengaturan.html";
+        });
+      }
+
+      if (profileLogout) {
+        profileLogout.addEventListener("click", async () => {
+          closeProfileMenu();
+
+          if (!confirm("Yakin ingin keluar dari akun Re:Foundry?")) return;
+
+          if (!window.Auth ||
+              typeof window.Auth.logout !== "function") {
+            alert("Sistem logout belum tersedia.");
+            return;
+          }
+
+          try {
+            await window.Auth.logout();
+            window.location.href = "login.html";
+          } catch (error) {
+            alert("Gagal keluar: " + error.message);
+          }
+        });
+      }
+    })();
+  </script>
+
+  <!-- CEK ROLE ADMIN -->
+  <script>
+    (async () => {
+      const adminLink = document.getElementById("adminDashboardLink");
+      if (!adminLink) return;
+
+      // Tunggu Supabase client selesai dibuat oleh script module.
+      let client = window.supabaseClient;
+
+      for (let i = 0; !client && i < 50; i++) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        client = window.supabaseClient;
+      }
+
+      if (!client) {
+        console.error("Supabase client belum tersedia.");
+        return;
+      }
+
+      try {
+        const { data: authData, error: authError } =
+          await client.auth.getUser();
+
+        if (authError || !authData?.user) return;
+
+        const { data: profile, error: profileError } =
+          await client
+            .from("profiles")
+            .select("role")
+            .eq("id", authData.user.id)
+            .maybeSingle();
+
+        if (profileError) {
+          console.error("Gagal membaca role admin:", profileError);
+          return;
+        }
+
+        if (String(profile?.role || "").trim().toLowerCase() === "admin") {
+          adminLink.hidden = false;
+        }
+      } catch (error) {
+        console.error("Gagal memeriksa admin:", error);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Daftar – Re:foundry</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="anon">
+  <div class="wrap">
+    <header>
+      <h1 class="register-brand">RE:FOUNDRY</h1>
+      <p class="sub">Buat akun untuk melaporkan barang hilang atau ditemukan.</p>
+    </header>
+
+    <main class="authbox">
+      <h2>Daftar</h2>
+
+      <form id="f">
+        <label for="uname">Nama lengkap</label>
+        <input id="uname" maxlength="60" autocomplete="name"
+               placeholder="Nama yang tampil di laporanmu" required>
+
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="email"
+               placeholder="nama@email.com" required>
+
+        <label for="pass">Password (minimal 6 karakter)</label>
+        <input id="pass" type="password" autocomplete="new-password"
+               minlength="6" required>
+
+        <label for="pass2">Ulangi password</label>
+        <input id="pass2" type="password" autocomplete="new-password"
+               minlength="6" required>
+
+        <div class="acts">
+          <button class="btn" id="go" type="submit">Daftar</button>
+        </div>
+
+        <p class="note" id="err" role="alert" aria-live="polite"></p>
+      </form>
+
+      <p class="note">
+        Sudah punya akun? <a href="login.html">Masuk di sini</a>
+      </p>
+    </main>
+  </div>
+
+  <script type="module">
+    const errorBox = document.getElementById("err");
+    const form = document.getElementById("f");
+    const button = document.getElementById("go");
+
+    function showMessage(message, success = false) {
+      errorBox.textContent = message;
+      errorBox.style.color = success ? "green" : "var(--lost)";
+    }
+
+    async function startRegistration() {
+      const { supabase } = await import("./supabase.js");
+
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      if (sessionData.session) {
+        location.replace("index.html");
+        return;
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!form.reportValidity()) return;
+
+        button.disabled = true;
+        button.textContent = "Memproses...";
+        showMessage("");
+
+        try {
+          const name =
+            document.getElementById("uname").value.trim();
+          const email =
+            document.getElementById("email").value.trim().toLowerCase();
+          const password =
+            document.getElementById("pass").value;
+          const passwordConfirm =
+            document.getElementById("pass2").value;
+
+          if (name.length < 3) {
+            throw new Error("Nama lengkap minimal 3 karakter.");
+          }
+
+          if (password.length < 6) {
+            throw new Error("Password minimal 6 karakter.");
+          }
+
+          if (password !== passwordConfirm) {
+            throw new Error("Konfirmasi password tidak sama.");
+          }
+
+          const { data, error: signUpError } =
+            await supabase.auth.signUp({
+              email,
+              password,
+              options: {
+                data: { name },
+                emailRedirectTo: location.origin + "/login.html"
+              }
+            });
+
+          if (signUpError) throw signUpError;
+
+          if (data.session) {
+            showMessage("Pendaftaran berhasil. Mengarahkan ke halaman utama...", true);
+            location.replace("index.html");
+            return;
+          }
+
+          showMessage(
+            "Permintaan pendaftaran berhasil dikirim. Jika konfirmasi email aktif, buka email untuk mengaktifkan akun. Jika email tidak masuk, periksa pengaturan Email di Supabase.",
+            true
+          );
+
+          form.reset();
+
+        } catch (error) {
+          console.error("Kesalahan pendaftaran:", error);
+          showMessage(
+            "Pendaftaran gagal: " +
+            (error.message || "Terjadi kesalahan. Coba lagi.")
+          );
+        } finally {
+          button.disabled = false;
+          button.textContent = "Daftar";
+        }
+      });
+    }
+
+    startRegistration().catch((error) => {
+      console.error("Gagal memuat Supabase:", error);
+      showMessage(
+        "Koneksi gagal: " +
+        (error.message || "Periksa supabase.js dan jalankan melalui server lokal.")
+      );
+    });
+  </script>
+</body>
+</html>
